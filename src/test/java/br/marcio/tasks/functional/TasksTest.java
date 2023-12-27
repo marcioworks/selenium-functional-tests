@@ -5,21 +5,27 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public class TasksTest {
 
-    private WebDriver callWebdrive() {
-        System.setProperty("webdriver.chrome.driver", "D:/Documents/Jenkis course/chromedriver-win64/chromedriver.exe");
-        WebDriver webDriver = new ChromeDriver();
-        webDriver.navigate().to("http://localhost:8001/tasks");
+    private WebDriver callWebdrive() throws MalformedURLException {
+      //  System.setProperty("webdriver.chrome.driver", "D:/Documents/Jenkis course/chromedriver-win64/chromedriver.exe");
+       // WebDriver webDriver = new ChromeDriver();
+        DesiredCapabilities cap = DesiredCapabilities.chrome();
+        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.1.19:4444/wd/hub"),cap);//selenium grid.
+        webDriver.navigate().to("http://192.168.1.19:8001/tasks");
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         return webDriver;
     }
 
     @Test
-    public void deveSalvarTarefa() {
+    public void deveSalvarTarefa() throws MalformedURLException {
         WebDriver webDriver = callWebdrive();
         try {
             //click add todo
@@ -42,7 +48,7 @@ public class TasksTest {
     }
 
     @Test
-    public void shouldNotCreateTaskWithoutDescription() {
+    public void shouldNotCreateTaskWithoutDescription() throws MalformedURLException {
         WebDriver webDriver = callWebdrive();
         try {
             //click add todo
@@ -64,7 +70,7 @@ public class TasksTest {
     }
 
     @Test
-    public void shouldNotCreateTaskWithoutDate() {
+    public void shouldNotCreateTaskWithoutDate() throws MalformedURLException {
         WebDriver webDriver = callWebdrive();
         try {
             //click add todo
@@ -85,7 +91,7 @@ public class TasksTest {
 
 
     @Test
-    public void shouldNotCreateTaskWithPastDate() {
+    public void shouldNotCreateTaskWithPastDate() throws MalformedURLException {
         WebDriver webDriver = callWebdrive();
         try {
             //click add todo
